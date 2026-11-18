@@ -1,2 +1,12 @@
-[tasks.publish]
-run = "cd npm/ && npm publish"
+[tasks.npm_build]
+description = "Repackage the GitHub release archives into per-platform npm packages under dist/npm"
+run = "node scripts/build_npm.mjs"
+
+[tasks.npm_publish]
+description = "Publish platform packages, then the npm wrapper"
+depends = ["npm_build"]
+run = "bash scripts/publish_npm.sh"
+
+[tasks.test]
+dir = "npm"
+run = "node --test"

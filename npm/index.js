@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 const fs = require("fs");
-const path = require("path");
-const { spawn, spawnSync } = require("child_process");
+const { spawn } = require("child_process");
 
-const RUNNER = path.join(__dirname, "update_check_runner.js");
 const {
   maybePrintCachedNotice,
   spawnUpdateCheckRunner,
 } = require("./update_check");
 
 const exe = process.platform === "win32" ? "synclet.exe" : "synclet";
-const binPath = path.join(__dirname, exe);
+const platformPackage = `@digitalvibeshq/synclet-${process.platform}-${process.arch}`;
 
 const PKG = (() => {
   try {
@@ -20,17 +18,16 @@ const PKG = (() => {
   }
 })();
 
-if (!fs.existsSync(binPath)) {
-  console.error(`Binary not found: ${binPath}. Attempting to download...`);
-  const result = spawnSync(
-    process.execPath,
-    [path.join(__dirname, "postinstall.js")],
-    { stdio: "inherit" },
+let binPath;
+try {
+  binPath = require.resolve(`${platformPackage}/bin/${exe}`);
+} catch {
+  console.error(
+    `synclet: ${platformPackage} is not installed. ` +
+      "Either this platform is unsupported or optional dependencies were " +
+      "omitted (--omit=optional / --no-optional).",
   );
-  if (result.status !== 0 || !fs.existsSync(binPath)) {
-    console.error("Failed to download binary.");
-    process.exit(1);
-  }
+  process.exit(1);
 }
 
 if (process.platform !== "win32") {
@@ -43,6 +40,11 @@ const child = spawn(binPath, process.argv.slice(2), {
   stdio: "inherit",
   windowsHide: true,
 });
+
+// A caller that signals only the wrapper would otherwise orphan the binary.
+for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+  process.on(sig, () => child.kill(sig));
+}
 
 // Best-effort update notice.
 try {

@@ -5,7 +5,8 @@
   "homepage": "https://synclet.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/digitalvibeshq/synclet-cli.git"
+    "url": "git+https://github.com/digitalvibeshq/synclet-cli.git",
+    "directory": "npm"
   },
   "keywords": [
     "synclet",
@@ -16,7 +17,6 @@
   ],
   "files": [
     "index.js",
-    "postinstall.js",
     "update_check.js",
     "update_check_runner.js"
   ],
@@ -30,7 +30,15 @@
     "synclet": "index.js"
   },
   "scripts": {
-    "postinstall": "node postinstall.js",
     "test": "node --test"
+  },
+  "optionalDependencies": {
+    "@digitalvibeshq/synclet-darwin-arm64": "2.1.0",
+    "@digitalvibeshq/synclet-darwin-x64": "2.1.0",
+    "@digitalvibeshq/synclet-linux-arm64": "2.1.0",
+    "@digitalvibeshq/synclet-linux-x64": "2.1.0",
+    "@digitalvibeshq/synclet-linux-arm": "2.1.0",
+    "@digitalvibeshq/synclet-win32-arm64": "2.1.0",
+    "@digitalvibeshq/synclet-win32-x64": "2.1.0"
   }
 }
