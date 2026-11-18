@@ -30,6 +30,7 @@
     "synclet": "index.js"
   },
   "scripts": {
-    "postinstall": "node postinstall.js"
+    "postinstall": "node postinstall.js",
+    "test": "node --test"
   }
 }
