@@ -6,12 +6,24 @@ const { spawn } = require('child_process');
 const semver = require('semver');
 
 const DEFAULT_PACKAGE_NAME = 'synclet';
-const DEFAULT_UPDATE_COMMAND = 'npm install -g synclet';
 
 const UPDATE_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const UPDATE_CHECK_TIMEOUT_MS = 1200;
 
 const RUNNER_FILE = 'update_check_runner.js';
+
+// Prefer mise upgrade for mise installs: npm install -g adds a copy the mise shim never runs.
+function detectUpdateCommand(packageName = DEFAULT_PACKAGE_NAME, dir = __dirname) {
+  const toSlashes = (p) => p.replace(/\\/g, '/');
+  const installDir = toSlashes(dir);
+  const miseNpmInstalls = process.env.MISE_DATA_DIR
+    ? toSlashes(path.join(process.env.MISE_DATA_DIR, 'installs')) + '/npm-'
+    : '';
+  if (installDir.includes('/mise/installs/npm-') || (miseNpmInstalls && installDir.startsWith(miseNpmInstalls))) {
+    return `mise upgrade npm:${packageName}`;
+  }
+  return `npm install -g ${packageName}`;
+}
 
 function isDisabled() {
   return (
@@ -157,7 +169,7 @@ function getCachedUpdate({ installedVersion, now = Date.now() }) {
 function maybePrintCachedNotice({
   packageName = DEFAULT_PACKAGE_NAME,
   installedVersion,
-  updateCommand = DEFAULT_UPDATE_COMMAND,
+  updateCommand = detectUpdateCommand(packageName),
 } = {}) {
   if (!shouldPrintNotice()) return false;
 
@@ -215,6 +227,7 @@ function spawnUpdateCheckRunner() {
 }
 
 module.exports = {
+  detectUpdateCommand,
   maybePrintCachedNotice,
   refreshCache,
   spawnUpdateCheckRunner,
