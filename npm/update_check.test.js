@@ -43,6 +43,10 @@ test('suggests npm install -g otherwise', () => {
       'npm install -g synclet'
     );
     assert.strictEqual(
+      detectUpdateCommand('synclet', '/opt/tools/installs/node/22/lib/node_modules/synclet'),
+      'npm install -g synclet'
+    );
+    assert.strictEqual(
       detectUpdateCommand('synclet', '/opt/tools-other/installs/npm-synclet/lib/node_modules/synclet'),
       'npm install -g synclet'
     );

@@ -12,14 +12,14 @@ const UPDATE_CHECK_TIMEOUT_MS = 1200;
 
 const RUNNER_FILE = 'update_check_runner.js';
 
-// `npm install -g` next to a mise install adds a second copy that the mise shim never runs.
+// Prefer mise upgrade for mise installs: npm install -g adds a copy the mise shim never runs.
 function detectUpdateCommand(packageName = DEFAULT_PACKAGE_NAME, dir = __dirname) {
   const toSlashes = (p) => p.replace(/\\/g, '/');
   const installDir = toSlashes(dir);
-  const miseInstalls = process.env.MISE_DATA_DIR
-    ? toSlashes(path.join(process.env.MISE_DATA_DIR, 'installs')) + '/'
+  const miseNpmInstalls = process.env.MISE_DATA_DIR
+    ? toSlashes(path.join(process.env.MISE_DATA_DIR, 'installs')) + '/npm-'
     : '';
-  if (installDir.includes('/mise/installs/npm-') || (miseInstalls && installDir.startsWith(miseInstalls))) {
+  if (installDir.includes('/mise/installs/npm-') || (miseNpmInstalls && installDir.startsWith(miseNpmInstalls))) {
     return `mise upgrade npm:${packageName}`;
   }
   return `npm install -g ${packageName}`;
