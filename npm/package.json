@@ -5,7 +5,7 @@
   "homepage": "https://synclet.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dvcrn/synclet-cli.git"
+    "url": "git+https://github.com/digitalvibeshq/synclet-cli.git"
   },
   "keywords": [
     "synclet",

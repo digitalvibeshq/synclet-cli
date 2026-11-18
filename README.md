@@ -6,7 +6,7 @@ Get the Synclet macOS app at https://synclet.dev
 
 > **Note:** ConfigMesh is now Synclet. As of **2.0.0** the CLI ships as the
 > [`synclet`](https://www.npmjs.com/package/synclet) npm package and a `synclet`
-> binary, from this repository (`dvcrn/synclet-cli`, formerly `dvcrn/configmesh-cli`).
+> binary, from this repository (`digitalvibeshq/synclet-cli`, formerly `dvcrn/synclet-cli` and `dvcrn/configmesh-cli`).
 >
 > The old `configmesh` npm package is deprecated and stays at 1.2.0. To move over:
 >

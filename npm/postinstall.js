@@ -6,7 +6,7 @@ const https = require("https");
 const crypto = require("crypto");
 const { spawnSync } = require("child_process");
 
-const OWNER = "dvcrn";
+const OWNER = "digitalvibeshq";
 const REPO = "synclet-cli";
 const BIN = "synclet";
 
